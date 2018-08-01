@@ -8,13 +8,13 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].min.js'
+        filename: '[name].js'
     },
     module: {
         rules: [
             {
-                test: /\.js?$/,
-                exclude: /(node_modules)/,
+                test: /\.js$/,
+                exclude: /node_modules/,
                 loader: 'babel-loader'
             }
         ]
@@ -25,17 +25,23 @@ module.exports = {
         }),
         new UglifyJsPlugin({
             test: /bundle/i,
-            sourceMap    : true,
+            sourceMap: true,
             uglifyOptions: {
                 ecma: 6,
                 mangle: true,
-                compress: true,
+                output: {
+                    comments: false,
+                    beautify: false
+                },
+                compress: {
+                    drop_console: true
+                },
                 warnings: false
             }
        })
     ],
     devServer: {
-        contentBase: path.join(__dirname,'./release'),
+        contentBase: path.join(__dirname,'./dist'),
         open: true,
         port: 3333
     }
